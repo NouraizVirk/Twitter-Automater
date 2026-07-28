@@ -1,0 +1,30 @@
+# Environment & Secrets
+config.yaml
+.env
+.env.*
+
+# Chrome Profile & Session Data
+chrome-profile/
+
+# Python Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Databases & Logs
+db/
+logs/
+*.db
+*.sqlite
+*.log
+
+# Cache & Build Artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode/
+.idea/
+
+# Media outputs
+media/
