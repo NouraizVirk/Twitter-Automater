@@ -1,5 +1,5 @@
 # ⚡ Twitter Autopilot v1.2
-
+> **Note:** The source code for this application is hosted in a private repository to protect proprietary security algorithms and system configurations. This public repository serves as an architectural overview and technical demonstration of the platform.
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/Browser-Playwright%20CDP-green?style=for-the-badge&logo=playwright&logoColor=white" alt="Playwright CDP">
