@@ -1,0 +1,117 @@
+# ── Twitter Autopilot — Configuration Template ────────────────
+# Copy this file to config.yaml and fill in your values.
+# NEVER commit your real config.yaml to git (it is in .gitignore).
+
+# ── AI / LLM Settings ─────────────────────────────────────────
+ai:
+  groq_api_key: "gsk_YOUR_GROQ_API_KEY_HERE"   # Get free key: https://console.groq.com
+  model: "llama-3.3-70b-versatile"
+  temperature: 0.85
+
+# ── Browser / CDP Settings ────────────────────────────────────
+browser:
+  chrome_debug_port: 9222
+  chrome_debug_url: "http://localhost:9222"
+  min_action_delay_ms: 800
+  max_action_delay_ms: 2500
+  post_timeout_seconds: 30
+
+# ── Media Settings ────────────────────────────────────────────
+media:
+  images:
+    enabled: true
+  videos:
+    enabled: false
+
+# ── Monetization ──────────────────────────────────────────────
+monetization:
+  affiliate_links_enabled: false
+  inject_frequency: 5
+
+# ── Niche & Keywords ──────────────────────────────────────────
+niche:
+  name: "AI / SaaS / Tech"
+  keywords:
+    - AI
+    - LLM
+    - automation
+    - open source
+    - SaaS
+    - machine learning
+    - ChatGPT
+    - Claude
+    - Gemini
+    - local AI
+    - startup
+    - developer tools
+
+# ── Posting Schedule ──────────────────────────────────────────
+posting:
+  thread_ratio: 0.25
+
+schedule:
+  posts_per_day: 8
+  randomize_minutes: 18
+
+# ── Reply Guy ─────────────────────────────────────────────────
+reply_guy:
+  enabled: true
+  replies_per_day: 24
+
+# ── Content Sources ───────────────────────────────────────────
+sources:
+  hacker_news:
+    enabled: true
+    min_score: 100
+
+  huggingface_papers:
+    enabled: true
+    limit: 10
+
+  github_trending:
+    enabled: true
+    language: ""
+    since: "daily"
+    min_stars_per_day: 100
+
+  reddit:
+    enabled: true
+    time_filter: "rising"
+    subreddits:
+      - name: LocalLLaMA
+        min_comments: 10
+      - name: MachineLearning
+        min_comments: 10
+      - name: OpenAI
+        min_comments: 10
+      - name: singularity
+        min_comments: 10
+
+  rss_feeds:
+    enabled: true
+    feeds:
+      - name: "OpenAI News"
+        url: "https://openai.com/news/rss.xml"
+      - name: "HuggingFace Blog"
+        url: "https://huggingface.co/blog/feed.xml"
+      - name: "Dev.to Top AI"
+        url: "https://dev.to/feed/tag/ai"
+      - name: "Product Hunt"
+        url: "https://www.producthunt.com/feed"
+      - name: "ArXiv AI"
+        url: "https://rss.arxiv.org/rss/cs.AI"
+      - name: "ArXiv CL"
+        url: "https://rss.arxiv.org/rss/cs.CL"
+      - name: "ArXiv CV"
+        url: "https://rss.arxiv.org/rss/cs.CV"
+      - name: "TechCrunch AI"
+        url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+      - name: "The Rundown AI"
+        url: "https://www.therundown.ai/rss"
+      - name: "VentureBeat AI"
+        url: "https://venturebeat.com/category/ai/feed/"
+
+# ── Stealth / Anti-Detection ──────────────────────────────────
+stealth:
+  daily_post_cap: 8
+  min_gap_between_posts_minutes: 60

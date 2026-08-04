@@ -1,0 +1,38 @@
+# ── Web Dashboard ──────────────────────────────────────────
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# ── Browser Automation ─────────────────────────────────────
+playwright>=1.44.0
+
+# ── Scheduler ──────────────────────────────────────────────
+apscheduler>=3.10.4
+
+# ── AI / LLM ───────────────────────────────────────────────
+groq>=0.9.0
+
+# ── Scraping / Feeds ───────────────────────────────────────
+requests>=2.31.0
+feedparser>=6.0.11
+beautifulsoup4>=4.12.0
+lxml>=5.2.0
+
+# ── Text-to-Speech (Free, local) ───────────────────────────
+edge-tts>=6.1.12
+
+# ── Media Processing ───────────────────────────────────────
+pillow>=10.3.0
+
+# ── Config & Utilities ─────────────────────────────────────
+pyyaml>=6.0.1
+python-dotenv>=1.0.1
+aiohttp>=3.9.5
+aiofiles>=23.2.1
+pyperclip>=1.8.2
+
+# ── Database ───────────────────────────────────────────────
+sqlalchemy>=2.0.30
+
+# ── NOTE: Whisper (subtitles) is optional — requires PyTorch (~2GB).
+# ── Install separately ONLY if you want video subtitles:
+# ──   pip install openai-whisper

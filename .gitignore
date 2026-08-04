@@ -12,8 +12,9 @@ venv/
 ENV/
 env/
 
-# Databases & Logs
-db/
+# Database files & Logs (keep source code, exclude data)
+db/autopilot.db
+db/__pycache__/
 logs/
 *.db
 *.sqlite
@@ -28,3 +29,7 @@ __pycache__/
 
 # Media outputs
 media/
+
+# Internal / Debug scripts (not for public repo)
+check.py
+PROJECT_CONTEXT.md

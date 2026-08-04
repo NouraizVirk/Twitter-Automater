@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twitter Autopilot — Control Panel</title>
+  <meta name="description" content="Automated AI-powered Twitter publishing dashboard for the AI/SaaS niche." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- ── Sidebar ─────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-name">Autopilot</div>
+        <div class="brand-sub">Twitter Engine v1.0</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-view="dashboard" id="nav-dashboard" onclick="showView('dashboard')">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a class="nav-item" data-view="queue" id="nav-queue" onclick="showView('queue')">
+        <span class="nav-icon">📋</span> Queue
+        <span class="nav-badge" id="queue-badge">0</span>
+      </a>
+      <a class="nav-item" data-view="history" id="nav-history" onclick="showView('history')">
+        <span class="nav-icon">✅</span> Published
+      </a>
+      <a class="nav-item" data-view="logs" id="nav-logs" onclick="showView('logs')">
+        <span class="nav-icon">📜</span> Logs
+      </a>
+      <a class="nav-item" data-view="settings" id="nav-settings" onclick="showView('settings')">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-status">
+      <div class="status-row" id="chrome-status">
+        <span class="status-dot" id="chrome-dot"></span>
+        <span class="status-label">Chrome CDP</span>
+      </div>
+      <div class="status-row" id="scheduler-status">
+        <span class="status-dot" id="sched-dot"></span>
+        <span class="status-label">Scheduler</span>
+      </div>
+      <div class="status-row">
+        <span class="status-dot" id="api-dot"></span>
+        <span class="status-label">Groq API</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ── Dashboard View ──────────────────────────── -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-header">
+        <h1 class="view-title">Dashboard</h1>
+        <div class="view-actions">
+          <button class="btn btn-secondary" onclick="triggerScrape()" id="scrape-btn">
+            🔍 Scrape Now
+          </button>
+          <button class="btn btn-primary" onclick="triggerPublishNext()">
+            🚀 Publish Next
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📤</div>
+          <div class="stat-value" id="stat-today-posts">—</div>
+          <div class="stat-label">Published Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value" id="stat-queue">—</div>
+          <div class="stat-label">Queued Posts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div class="stat-value" id="stat-replies">—</div>
+          <div class="stat-label">Replies Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔗</div>
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total Published</div>
+        </div>
+      </div>
+
+      <!-- API Key Setup Banner (shown if key not set) -->
+      <div class="setup-banner" id="setup-banner" style="display:none">
+        <div class="setup-banner-icon">🔑</div>
+        <div class="setup-banner-text">
+          <strong>Set up your free Groq API key to activate the AI engine</strong>
+          <span>Get it free at <a href="https://console.groq.com" target="_blank">console.groq.com</a> — no credit card needed</span>
+        </div>
+        <div class="setup-banner-input">
+          <input type="text" id="api-key-input" placeholder="gsk_..." class="api-key-input" />
+          <button class="btn btn-primary btn-sm" onclick="saveApiKey()">Save Key</button>
+        </div>
+      </div>
+
+      <!-- Chrome Setup Banner -->
+      <div class="alert-banner alert-warning" id="chrome-banner" style="display:none">
+        <span>⚠️</span>
+        <div>
+          <strong>Chrome not connected.</strong> 
+          Run <code>start.bat</code> to launch Chrome with remote debugging, or see the README.
+        </div>
+      </div>
+
+      <!-- Next Scheduled Posts Preview -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">⏰ Next Scheduled Posts</h2>
+        </div>
+        <div id="next-posts-list" class="post-preview-list">
+          <div class="empty-state">No posts queued yet. Click "Scrape Now" to fill the queue.</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📈 Recent Activity</h2>
+        </div>
+        <div id="recent-logs" class="log-list compact"></div>
+      </div>
+    </section>
+
+    <!-- ── Queue View ───────────────────────────────── -->
+    <section class="view" id="view-queue">
+      <div class="view-header">
+        <h1 class="view-title">Post Queue</h1>
+        <div class="view-actions">
+          <button class="btn btn-secondary" onclick="triggerScrape()">🔍 Refill Queue</button>
+        </div>
+      </div>
+      <div id="queue-list" class="post-list"></div>
+    </section>
+
+    <!-- ── History View ─────────────────────────────── -->
+    <section class="view" id="view-history">
+      <div class="view-header">
+        <h1 class="view-title">Published Posts</h1>
+      </div>
+      <div id="history-list" class="post-list"></div>
+    </section>
+
+    <!-- ── Logs View ────────────────────────────────── -->
+    <section class="view" id="view-logs">
+      <div class="view-header">
+        <h1 class="view-title">System Logs</h1>
+        <div class="view-actions">
+          <select id="log-filter" class="select-input" onchange="filterLogs()">
+            <option value="ALL">All Levels</option>
+            <option value="SUCCESS">Success</option>
+            <option value="INFO">Info</option>
+            <option value="WARN">Warnings</option>
+            <option value="ERROR">Errors</option>
+          </select>
+        </div>
+      </div>
+      <div id="logs-list" class="log-list full"></div>
+    </section>
+
+    <!-- ── Settings View ────────────────────────────── -->
+    <section class="view" id="view-settings">
+      <div class="view-header">
+        <h1 class="view-title">Settings</h1>
+        <div class="view-actions">
+          <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <!-- AI Settings -->
+        <div class="card settings-card">
+          <div class="card-header"><h2 class="card-title">🤖 AI Engine (Groq)</h2></div>
+          <div class="settings-body">
+            <div class="setting-group">
+              <label class="setting-label">Groq API Key</label>
+              <div class="input-row">
+                <input type="password" id="s-groq-key" class="text-input" placeholder="gsk_..." />
+                <button class="btn btn-sm btn-secondary" onclick="toggleKeyVisibility()">👁</button>
+              </div>
+              <span class="setting-hint">Free at <a href="https://console.groq.com" target="_blank">console.groq.com</a></span>
+            </div>
+            <div class="setting-group">
+              <label class="setting-label">AI Model</label>
+              <select id="s-model" class="select-input">
+                <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Recommended)</option>
+                <option value="llama3-8b-8192">Llama 3 8B (Faster)</option>
+                <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+              </select>
+            </div>
+            <div class="setting-group">
+              <label class="setting-label">Creativity (Temperature)</label>
+              <input type="range" id="s-temp" min="0.5" max="1.2" step="0.05" class="range-input" />
+              <span class="range-value" id="s-temp-val">0.85</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule Settings -->
+        <div class="card settings-card">
+          <div class="card-header"><h2 class="card-title">📅 Posting Schedule</h2></div>
+          <div class="settings-body">
+            <div class="setting-group">
+              <label class="setting-label">Posts Per Day</label>
+              <input type="number" id="s-posts-per-day" min="1" max="10" class="text-input" />
+            </div>
+            <div class="setting-group">
+              <label class="setting-label">Time Randomization (± minutes)</label>
+              <input type="number" id="s-jitter" min="0" max="30" class="text-input" />
+              <span class="setting-hint">Adds random minutes to posting times (recommended: 10–20)</span>
+            </div>
+            <div class="setting-group">
+              <label class="setting-label">Thread Ratio (%)</label>
+              <input type="range" id="s-thread-ratio" min="0" max="100" step="5" class="range-input" />
+              <span class="range-value" id="s-thread-ratio-val">65%</span>
+              <span class="setting-hint">Percentage of posts that are threads vs single tweets</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reply Guy Settings -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <h2 class="card-title">💬 Reply Guy</h2>
+            <label class="toggle-label">
+              <input type="checkbox" id="s-reply-enabled" class="toggle-input" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="settings-body">
+            <div class="setting-group">
+              <label class="setting-label">Replies Per Day</label>
+              <input type="number" id="s-replies-per-day" min="5" max="50" class="text-input" />
+              <span class="setting-hint">Start with 15–25. Aggressive reply = faster follower growth.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Media Settings -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <h2 class="card-title">🖼️ Media Generation</h2>
+          </div>
+          <div class="settings-body">
+            <div class="setting-group">
+              <label class="setting-label">
+                AI Image Generation
+                <label class="toggle-label inline">
+                  <input type="checkbox" id="s-images-enabled" class="toggle-input" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </label>
+              <span class="setting-hint">Pollinations.ai — free, no key needed</span>
+            </div>
+            <div class="setting-group">
+              <label class="setting-label">
+                Video Generation (requires FFmpeg)
+                <label class="toggle-label inline">
+                  <input type="checkbox" id="s-videos-enabled" class="toggle-input" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </label>
+              <span class="setting-hint">Edge-TTS + FFmpeg + Whisper — all free</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monetization Settings -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <h2 class="card-title">💰 Affiliate Links</h2>
+            <label class="toggle-label">
+              <input type="checkbox" id="s-affiliate-enabled" class="toggle-input" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="settings-body">
+            <div class="setting-group">
+              <label class="setting-label">Inject Every N Posts</label>
+              <input type="number" id="s-inject-freq" min="3" max="20" class="text-input" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Safety Settings -->
+        <div class="card settings-card">
+          <div class="card-header"><h2 class="card-title">🛡️ Stealth & Safety</h2></div>
+          <div class="settings-body">
+            <div class="setting-group">
+              <label class="setting-label">Daily Post Cap</label>
+              <input type="number" id="s-daily-cap" min="3" max="15" class="text-input" />
+              <span class="setting-hint">Hard ceiling. Never exceed this regardless of schedule.</span>
+            </div>
+            <div class="setting-group">
+              <label class="setting-label">Min Gap Between Posts (minutes)</label>
+              <input type="number" id="s-min-gap" min="20" max="120" class="text-input" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Toast Notification ─────────────────────────── -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
