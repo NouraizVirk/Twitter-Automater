@@ -7,8 +7,6 @@
   <img src="https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge" alt="MIT License">
 </p>
 
-> **Note:** The source code for this application is hosted in a private repository to protect proprietary security algorithms and system configurations. This public repository serves as an architectural overview and technical demonstration of the platform.you can email at (nouriaz.virk10@gmail.com) to get access to source code
-
 
 
 > **Twitter Autopilot** is a fully automated, self-hosted, narrative-driven Twitter publishing & content curation engine designed specifically for the **AI / SaaS / Tech** niche. It continuously ingests trending tech stories, processes them through high-converting viral storytelling frameworks (Frameworks A, B & C) using Groq Llama 3.3 70B, pairs them with native OG cards, dark-mode PIL typography banners, or contextual tech memes, and publishes them natively via Playwright CDP (Chrome DevTools Protocol) using your real logged-in Chrome session.
